@@ -6,26 +6,70 @@
 #    By: yolee <yolee@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/17 06:35:36 by yolee             #+#    #+#              #
-#    Updated: 2022/06/17 08:04:21 by yolee            ###   ########.fr        #
+#    Updated: 2022/07/20 23:56:01 by yolee            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
+CFLAGS = -Wall -Wextra -Werror
 NAME = so_long
-OBJ = main.o
+MLX_DIR = ./mlx
+LIBFT_DIR = ./libft
+MAND_DIR = ./mandatory
+BONUS_DIR = ./bonus
+SRCS_FILE_M = error_handle.c \
+	get_next_line.c \
+	main.c \
+	map_error_check.c \
+	map_load.c \
+	mlx_data_cntl.c \
+	
+SRCS_M = $(addprefix $(MAND_DIR)/, $(SRCS_FILE_M))
+
+SRCS_FILE_B = error_handle.c \
+	get_next_line.c \
+	main.c \
+	map_error_check.c \
+	map_load.c \
+	mlx_data_cntl.c \
+
+SRCS_B = $(addprefix $(BONUS_DIR)/, $(SRCS_FILE_B))
+
+OBJS_M = $(SRCS_M:.c=.o)
+OBJS_B = $(SRCS_B:.c=.o)
+
+ifdef BONUS_FLAG
+	NAME := $(addprefix $(BONUS_DIR)/, $(NAME))
+	SRCS = $(SRCS_B)
+	OBJS = $(OBJS_B)
+else
+	NAME := $(addprefix $(MAND_DIR)/, $(NAME))
+	SRCS = $(SRCS_M)
+	OBJS = $(OBJS_M)
+endif
 
 all : $(NAME)
 
-$(NAME): $(OBJ)
-	$(CC) $(OBJ) -Lmlx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
+$(NAME): $(OBJS)
+	$(MAKE) -C $(MLX_DIR)
+	$(MAKE) bonus -C $(LIBFT_DIR)
+	$(CC) $(OBJS) -I $(LIBFT_DIR) -L$(LIBFT_DIR) -lft -Lmlx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
 
 %.o: %.c
-	$(CC) -Wall -Wextra -Werror -Imlx -c $< -o $@
+	$(CC) -I $(LIBFT_DIR) -L$(LIBFT_DIR) -lft -Imlx -c $< -o $@
 
+bonus :
+	$(MAKE) BONUS_FLAG=1 all
 clean :
-	$(RM) $(OBJ)
+	$(MAKE) clean -C $(MLX_DIR) 
+	$(MAKE) fclean -C $(LIBFT_DIR) 
+	$(RM) $(OBJS_M)
+	$(RM) $(OBJS_B)
 
 fclean : clean
-	$(RM) $(NAME) 
+	$(RM) $(BONUS_DIR)/$(NAME)
+	$(RM) $(MAND_DIR)/$(NAME)
 
 re : fclean all
+
+.phony : all clean fclean re
