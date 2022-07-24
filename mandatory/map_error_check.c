@@ -6,7 +6,7 @@
 /*   By: yolee <yolee@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 17:25:29 by yolee             #+#    #+#             */
-/*   Updated: 2022/07/21 16:14:06 by yolee            ###   ########.fr       */
+/*   Updated: 2022/07/25 03:01:24 by yolee            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	map_error_check(t_map *map)
 	int	loop_y;
 	int	exist_flag[3];
 
+	map->collect_num = 0;
 	ft_bzero(exist_flag, sizeof(int) * 3);
 	loop_y = 0;
 	while (loop_y < map->height)
@@ -50,6 +51,8 @@ void	map_error_check(t_map *map)
 		loop_x = 0;
 		while (loop_x < map->width)
 		{
+			if (map->map_data[loop_y][loop_x] == 'C')
+				map->collect_num++;
 			find_invalid_map_char(map, exist_flag, loop_x, loop_y);
 			loop_x++;
 		}

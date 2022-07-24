@@ -6,7 +6,7 @@
 /*   By: yolee <yolee@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 14:45:28 by yolee             #+#    #+#             */
-/*   Updated: 2022/07/25 00:39:37 by yolee            ###   ########.fr       */
+/*   Updated: 2022/07/25 02:28:00 by yolee            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static void	init_player(t_mlx *mlx_data, t_player **player)
 	init_img(mlx_data->mlx, &(*player)->character_img, "./res/hero.xpm");
 	(*player)->player_pos.x = 0;
 	(*player)->player_pos.y = 0;
+	(*player)->step = 0;
 }
 
 void	init_data(t_data **data)

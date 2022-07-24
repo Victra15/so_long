@@ -6,7 +6,7 @@
 #    By: yolee <yolee@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/17 06:35:36 by yolee             #+#    #+#              #
-#    Updated: 2022/07/24 23:43:21 by yolee            ###   ########.fr        #
+#    Updated: 2022/07/25 03:04:57 by yolee            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,9 @@ SRCS_FILE_M = error_handle.c \
 	init_img.c \
 	map_render.c \
 	key_event.c \
+	player_move.c \
+	player_move_utils.c \
+
 	
 SRCS_M = $(addprefix $(MAND_DIR)/, $(SRCS_FILE_M))
 
@@ -59,7 +62,7 @@ $(NAME): $(OBJS)
 	$(CC) $(OBJS) -I $(LIBFT_DIR) -L$(LIBFT_DIR) -lft -Lmlx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
 
 %.o: %.c
-	$(CC) -I $(LIBFT_DIR) -L$(LIBFT_DIR) -lft -Imlx -c $< -o $@
+	$(CC) -I $(LIBFT_DIR) -Imlx -c $< -o $@
 
 bonus :
 	$(MAKE) BONUS_FLAG=1 all
