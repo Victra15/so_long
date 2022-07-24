@@ -6,13 +6,13 @@
 #    By: yolee <yolee@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/17 06:35:36 by yolee             #+#    #+#              #
-#    Updated: 2022/07/20 23:56:01 by yolee            ###   ########.fr        #
+#    Updated: 2022/07/24 23:43:21 by yolee            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-NAME = so_long
+TARGET = so_long
 MLX_DIR = ./mlx
 LIBFT_DIR = ./libft
 MAND_DIR = ./mandatory
@@ -22,7 +22,10 @@ SRCS_FILE_M = error_handle.c \
 	main.c \
 	map_error_check.c \
 	map_load.c \
-	mlx_data_cntl.c \
+	init_mlx_data.c \
+	init_img.c \
+	map_render.c \
+	key_event.c \
 	
 SRCS_M = $(addprefix $(MAND_DIR)/, $(SRCS_FILE_M))
 
@@ -39,11 +42,11 @@ OBJS_M = $(SRCS_M:.c=.o)
 OBJS_B = $(SRCS_B:.c=.o)
 
 ifdef BONUS_FLAG
-	NAME := $(addprefix $(BONUS_DIR)/, $(NAME))
+	NAME = $(addprefix $(BONUS_DIR)/, $(TARGET))
 	SRCS = $(SRCS_B)
 	OBJS = $(OBJS_B)
 else
-	NAME := $(addprefix $(MAND_DIR)/, $(NAME))
+	NAME = $(addprefix $(MAND_DIR)/, $(TARGET))
 	SRCS = $(SRCS_M)
 	OBJS = $(OBJS_M)
 endif
@@ -67,8 +70,8 @@ clean :
 	$(RM) $(OBJS_B)
 
 fclean : clean
-	$(RM) $(BONUS_DIR)/$(NAME)
-	$(RM) $(MAND_DIR)/$(NAME)
+	$(RM) $(MAND_DIR)/$(TARGET)
+	$(RM) $(BONUS_DIR)/$(TARGET)
 
 re : fclean all
 

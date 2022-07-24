@@ -6,7 +6,7 @@
 /*   By: yolee <yolee@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 19:22:56 by yolee             #+#    #+#             */
-/*   Updated: 2022/07/20 23:05:43 by yolee            ###   ########.fr       */
+/*   Updated: 2022/07/25 00:35:46 by yolee            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,15 @@
 # define COLLECT_FLAG 0
 # define EXIT_FLAG 1
 # define PLAYER_FLAG 2
+# define KEYCODE_ESC 53
+# define KEYCODE_UP 126
+# define KEYCODE_DOWN 125
+# define KEYCODE_LEFT 123
+# define KEYCODE_RIGHT 124
+# define KEYCODE_W 13
+# define KEYCODE_A 0
+# define KEYCODE_S 1
+# define KEYCODE_D 2
 # define MAP_DIR "./maps"
 
 typedef struct s_pos
@@ -31,6 +40,30 @@ typedef struct s_pos
 	int	y;
 }t_pos;
 
+typedef struct s_img{
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+	int		width;
+	int		height;
+}t_img;
+
+typedef struct s_player
+{
+	t_img	*character_img;
+	t_pos	player_pos;
+}t_player;
+
+typedef struct s_img_data
+{
+	t_img		*exit_img;
+	t_img		*collect_img;
+	t_img		*wall_img;
+	t_img		*tile_img;
+}t_img_data;
+
 typedef struct s_map
 {
 	char	**map_data;
@@ -38,27 +71,21 @@ typedef struct s_map
 	int		height;
 }t_map;
 
-typedef struct s_img{
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}t_img;
 
-typedef struct s_data
+typedef struct s_mlx
 {
 	void	*mlx;
 	void	*mlx_win;
-	t_img	*img;
-	t_map	*map;
-	t_pos	player_pos;
+}t_mlx;
+
+typedef struct s_data
+{
+	t_mlx		*mlx_data;
+	t_img_data	*img_data;
+	t_player	*player;
+	t_map		*map;
 }t_data;
 
-size_t	ft_strlen(const char *str);
-char	*ft_strchr(const char *s, int c);
-size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
-void	*ft_memmove(void *dst, const void *src, size_t len);
 char	*get_next_line(int fd);
 
 void	*safe_malloc(size_t	mal_size);
@@ -66,10 +93,13 @@ void	safe_free(void	**alloc_mem);
 void	exit_with_custom_err_msg(char *custom_msg);
 void	exit_with_err_msg(void);
 
-void	init_mlx_data(t_data *mlx_data);
-void	destroy_mlx_data(t_data *mlx_data);
+void	init_img(t_mlx *mlx, t_img **img, char *filename);
+void	init_data(t_data **mlx_data);
 
 t_map	*map_load(int argc, char **argv);
+void	map_render(t_data *data);
 
 void	map_error_check(t_map *map);
+int		key_event(int keycode, t_data *data);
+int		exit_game(t_data *data);
 #endif

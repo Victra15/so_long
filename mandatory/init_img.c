@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   init_img.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yolee <yolee@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/29 14:12:04 by yolee             #+#    #+#             */
-/*   Updated: 2022/07/25 00:42:05 by yolee            ###   ########.fr       */
+/*   Created: 2022/07/23 18:08:49 by yolee             #+#    #+#             */
+/*   Updated: 2022/07/23 21:31:31 by yolee            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	main(int argc, char **argv)
+void	init_img(t_mlx *mlx, t_img **img, char *filename)
 {
-	t_data	*data;
-
-	init_data(&data);
-	data->map = map_load(argc, argv);
-	map_render(data);
-	mlx_key_hook(data->mlx_data->mlx_win, key_event, data);
-	mlx_hook(data->mlx_data->mlx_win, 17, 0, exit_game, data);
-	mlx_loop(data->mlx_data->mlx);
-	return (0);
+	(*img) = (t_img *)safe_malloc(sizeof(t_img));
+	(*img)->img = mlx_xpm_file_to_image(mlx, filename,
+			&(*img)->width,
+			&(*img)->height);
+	if ((*img)->img == NULL)
+		exit_with_custom_err_msg("image file not found.");
+	(*img)->addr = mlx_get_data_addr((*img)->img,
+			&(*img)->bits_per_pixel,
+			&(*img)->line_length,
+			&(*img)->endian);
 }

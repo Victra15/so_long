@@ -6,7 +6,7 @@
 /*   By: yolee <yolee@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 13:28:27 by yolee             #+#    #+#             */
-/*   Updated: 2022/07/21 14:50:22 by yolee            ###   ########.fr       */
+/*   Updated: 2022/07/25 00:41:32 by yolee            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void	load_from_lst(t_map **map, t_list **lst)
 		(*map)->map_data[loop] = (*lst)->content;
 		temp = (*lst);
 		(*lst) = (*lst)->next;
-		free(temp);
+		safe_free((void **)&temp);
 		loop++;
 	}
 }
@@ -78,6 +78,8 @@ static t_map	*load_from_file(char *filename)
 	t_map	*map;
 
 	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		exit_with_err_msg();
 	map = (t_map *)safe_malloc(sizeof(t_map));
 	line_lst = make_char_lst(fd, &map);
 	load_from_lst(&map, &line_lst);
